@@ -1,0 +1,231 @@
+:root {
+  --blueberry-skin: #2F3A55;
+  --berry-bloom: #5C6B8A;
+  --stem-grey: #6E6F73;
+  --yogurt-tint: #E7E2DE;
+  --plate-white: #F5F6F3;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: var(--blueberry-skin);
+    background-color: var(--plate-white);
+}
+
+/* Header y navegación */
+header {
+    background-color: var(--blueberry-skin);
+    color: var(--plate-white);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+nav a {
+    color: var(--plate-white);
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: var(--yogurt-tint);
+}
+
+/* Botones */
+.btn {
+    display: inline-block;
+    background-color: var(--berry-bloom);
+    color: var(--plate-white);
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: var(--blueberry-skin);
+}
+
+/* Hero section */
+.hero {
+    background: linear-gradient(135deg, var(--blueberry-skin) 0%, var(--berry-bloom) 100%);
+    color: var(--plate-white);
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+/* Productos grid */
+.productos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+/* Tarjeta de producto */
+.producto-card {
+    border: 1px solid var(--stem-grey);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    background-color: white;
+}
+
+.producto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.producto-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.producto-card h3 {
+    padding: 1rem 1rem 0.5rem;
+    font-size: 1.1rem;
+    color: var(--blueberry-skin);
+}
+
+.producto-card .precio {
+    padding: 0 1rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--berry-bloom);
+}
+
+.producto-card .descripcion {
+    padding: 0 1rem;
+    font-size: 0.9rem;
+    color: var(--stem-grey);
+}
+
+.producto-card button {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+}
+
+/* Footer */
+footer {
+    background-color: var(--blueberry-skin);
+    color: var(--plate-white);
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* Formularios */
+.auth-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: 1px solid var(--stem-grey);
+    border-radius: 8px;
+    background-color: white;
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 0.8rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--stem-grey);
+}
+
+.tab-btn.active {
+    border-bottom: 2px solid var(--berry-bloom);
+    color: var(--berry-bloom);
+}
+
+.auth-form {
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border: 1px solid var(--stem-grey);
+    border-radius: 4px;
+}
+
+.auth-form button {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 1rem;
+}
+
+.error-message {
+    color: #7F0303; /* maroon de tu segunda paleta, puedes ajustar */
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* Carrito */
+.carrito-lleno table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.carrito-lleno th, .carrito-lleno td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--stem-grey);
+}
+
+.carrito-total {
+    text-align: right;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--stem-grey);
+}
+
+.carrito-vacio {
+    text-align: center;
+    padding: 3rem;
+    color: var(--stem-grey);
+}

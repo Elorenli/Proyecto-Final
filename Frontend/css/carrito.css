@@ -1,0 +1,143 @@
+/* carrito.css */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #F5F6F3;
+    color: #2F3A55;
+}
+
+header {
+    background-color: #2F3A55;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #E7E2DE;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: calc(100vh - 200px);
+}
+
+main h2 {
+    color: #2F3A55;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+#carrito-contenedor {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 2rem;
+}
+
+.carrito-vacio {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.carrito-vacio p {
+    color: #6E6F73;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #5C6B8A;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #2F3A55;
+}
+
+.carrito-lleno {
+    overflow-x: auto;
+}
+
+.carrito-lleno table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+}
+
+.carrito-lleno th,
+.carrito-lleno td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #6E6F73;
+}
+
+.carrito-lleno th {
+    background-color: #E7E2DE;
+    color: #2F3A55;
+    font-weight: 600;
+}
+
+.carrito-lleno td {
+    color: #2F3A55;
+}
+
+.carrito-total {
+    text-align: right;
+    padding-top: 1.5rem;
+    border-top: 2px solid #6E6F73;
+}
+
+.carrito-total h3 {
+    font-size: 1.5rem;
+    color: #2F3A55;
+    margin-bottom: 1.5rem;
+}
+
+.carrito-total h3 span {
+    color: #5C6B8A;
+    font-size: 1.8rem;
+}
+
+footer {
+    background-color: #2F3A55;
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}

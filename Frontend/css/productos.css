@@ -1,0 +1,149 @@
+/* productos.css */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #F5F6F3;
+    color: #2F3A55;
+}
+
+header {
+    background-color: #2F3A55;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #E7E2DE;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: calc(100vh - 200px);
+}
+
+.catalogo h2 {
+    color: #2F3A55;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.filtros {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#categoria-filtro {
+    padding: 0.6rem 1rem;
+    border: 1px solid #6E6F73;
+    border-radius: 5px;
+    background-color: white;
+    color: #2F3A55;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+#categoria-filtro:focus {
+    outline: none;
+    border-color: #5C6B8A;
+}
+
+.productos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.producto-card {
+    background-color: white;
+    border: 1px solid #6E6F73;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.producto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.producto-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.producto-card h3 {
+    padding: 1rem 1rem 0.5rem;
+    font-size: 1.1rem;
+    color: #2F3A55;
+}
+
+.producto-card .precio {
+    padding: 0 1rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #5C6B8A;
+}
+
+.producto-card .descripcion {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: #6E6F73;
+}
+
+.producto-card .btn {
+    display: inline-block;
+    margin: 1rem;
+    width: calc(100% - 2rem);
+    background-color: #5C6B8A;
+    color: white;
+    padding: 0.8rem;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.producto-card .btn:hover {
+    background-color: #2F3A55;
+}
+
+footer {
+    background-color: #2F3A55;
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}

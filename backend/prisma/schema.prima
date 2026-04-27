@@ -1,0 +1,524 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PROCESSING
+  SHIPPED
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+  REFUNDED
+  RETURNED
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED_AMOUNT
+  BUY_X_GET_Y
+}
+
+//  USUARIOS
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  firstName     String
+  lastName      String
+  phone         String?
+  avatar        String?
+  dateOfBirth   DateTime?
+  gender        String?
+  
+  role          UserRole  @default(CUSTOMER)
+  isVerified    Boolean   @default(false)
+  isActive      Boolean   @default(true)
+  
+  addresses     Address[]
+  paymentMethods PaymentMethod[]
+  
+  cart          Cart?
+  wishlist      Wishlist?
+  
+  orders        Order[]
+  reviews       Review[]
+  supportTickets SupportTicket[]
+  
+  lastLogin     DateTime?
+  refreshToken  String?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("users")
+}
+
+//  DIRECCIONES
+model Address {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  label         String    // "Casa", "Trabajo", "Otro"
+  recipientName String
+  phone         String
+  street        String
+  number        String
+  interior      String?
+  neighborhood  String
+  city          String
+  state         String
+  zipCode       String
+  country       String    @default("MX")
+  references    String?
+  
+  isDefault     Boolean   @default(false)
+  latitude      Float?
+  longitude     Float?
+  
+  orders        Order[]
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("addresses")
+}
+
+//  MÉTODOS DE PAGO
+model PaymentMethod {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type          String    // "credit_card", "debit_card", "paypal"
+  provider      String    // "stripe", "paypal"
+  lastFour      String?
+  brand         String?   // "visa", "mastercard"
+  expiryMonth   Int?
+  expiryYear    Int?
+  isDefault     Boolean   @default(false)
+  tokenId       String    @unique // ID del token en Stripe/PayPal
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("payment_methods")
+}
+
+//  CATEGORÍAS (hasta 3 niveles)
+model Category {
+  id            String     @id @default(uuid())
+  name          String
+  slug          String     @unique
+  description   String?
+  image         String?
+  icon          String?
+  
+  parentId      String?
+  parent        Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children      Category[] @relation("CategoryTree")
+  
+  products      Product[]
+  filters       CategoryFilter[]
+  
+  sortOrder     Int        @default(0)
+  isActive      Boolean    @default(true)
+  
+  metaTitle     String?
+  metaDescription String?
+  
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@index([parentId])
+  @@map("categories")
+}
+
+//  ATRIBUTOS DE CATEGORÍA (color, talla, material, etc.)
+model CategoryFilter {
+  id            String     @id @default(uuid())
+  categoryId    String
+  category      Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  name          String     // "Color", "Talla", "Material"
+  type          String     // "color", "size", "text"
+  
+  filterValues  FilterValue[]
+  
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@map("category_filters")
+}
+
+model FilterValue {
+  id            String          @id @default(uuid())
+  filterId      String
+  filter        CategoryFilter  @relation(fields: [filterId], references: [id], onDelete: Cascade)
+  
+  value         String          // "Rojo", "XL", "Algodón"
+  hexColor      String?         // Para colores: #FF0000
+  
+  products      ProductFilterValue[]
+  
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@map("filter_values")
+}
+
+//  PRODUCTOS
+model Product {
+  id              String    @id @default(uuid())
+  title           String
+  slug            String    @unique
+  description     String
+  details         Json?     // Cuidados, composición, temporada, etc.
+  
+  brand           String?   // Solo si manejas múltiples marcas
+  gender          String?   // "men", "women", "unisex", "kids"
+  ageGroup        String?   // "adult", "teen", "kids"
+  
+  basePrice       Float
+  compareAtPrice  Float?    // Precio tachado
+  costPrice       Float?    // Para margen de ganancia
+  
+  sku             String    @unique
+  barcode         String?
+  weight          Float?    // kg
+  dimensions      Json?     // { length, width, height }
+  
+  isActive        Boolean   @default(true)
+  isNew           Boolean   @default(false)
+  isFeatured      Boolean   @default(false)
+  isOnSale        Boolean   @default(false)
+  isPreorder      Boolean   @default(false)
+  
+  minOrderQty     Int       @default(1)
+  maxOrderQty     Int?
+  
+  salesCount      Int       @default(0)
+  viewsCount      Int       @default(0)
+  rating          Float     @default(0)
+  reviewCount     Int       @default(0)
+  
+  categoryId      String
+  category        Category  @relation(fields: [categoryId], references: [id])
+  
+  variants        ProductVariant[]
+  images          ProductImage[]
+  filterValues    ProductFilterValue[]
+  reviews         Review[]
+  
+  discountId      String?
+  discount        Discount? @relation(fields: [discountId], references: [id])
+  
+  cartItems       CartItem[]
+  wishlistItems   WishlistItem[]
+  orderItems      OrderItem[]
+  
+  metaTitle       String?
+  metaDescription String?
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([categoryId])
+  @@index([basePrice])
+  @@index([rating])
+  @@index([salesCount])
+  @@map("products")
+}
+
+//  VARIANTES (talla + color + stock)
+model ProductVariant {
+  id          String    @id @default(uuid())
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  sku         String    @unique
+  size        String?   // "S", "M", "L", "XL"
+  color       String?   // "Rojo"
+  colorHex    String?   // "#FF0000"
+  
+  price       Float?    // Precio específico para esta variante
+  stock       Int       @default(0)
+  lowStockAlert Int?    // Avisar cuando baje de X unidades
+  
+  imageUrl    String?   // Imagen específica de la variante
+  
+  isAvailable Boolean   @default(true)
+  
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([productId, size, color])
+  @@map("product_variants")
+}
+
+//  IMÁGENES
+model ProductImage {
+  id          String    @id @default(uuid())
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  url         String
+  thumbnailUrl String?
+  alt         String?
+  
+  order       Int       @default(0)
+  isPrimary   Boolean   @default(false)
+  isVariant   Boolean   @default(false) // Si es imagen de variante específica
+  variantId   String?   // ID de la variante
+  
+  width       Int?
+  height      Int?
+  size        Int?      // bytes
+  
+  createdAt   DateTime  @default(now())
+
+  @@map("product_images")
+}
+
+// 🔗 PRODUCTO - VALORES DE FILTRO
+model ProductFilterValue {
+  id            String       @id @default(uuid())
+  productId     String
+  product       Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  filterValueId String
+  filterValue   FilterValue  @relation(fields: [filterValueId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, filterValueId])
+  @@map("product_filter_values")
+}
+
+//  DESCUENTOS
+model Discount {
+  id            String     @id @default(uuid())
+  name          String
+  code          String     @unique
+  description   String?
+  
+  type          DiscountType
+  value         Float      // Porcentaje o cantidad fija
+  minPurchase   Float?     // Compra mínima
+  maxDiscount   Float?     // Descuento máximo (para porcentajes)
+  
+  usageLimit    Int?
+  usedCount     Int        @default(0)
+  
+  isActive      Boolean    @default(true)
+  isPublic      Boolean    @default(false) // Si aparece en la tienda
+  
+  startsAt      DateTime?
+  expiresAt     DateTime?
+  
+  applicableTo  String?    // "all", "categories", "products"
+  categories    String[]   @default([])
+  
+  products      Product[]
+  orders        Order[]
+  
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@map("discounts")
+}
+
+//  CARRITO
+model Cart {
+  id            String     @id @default(uuid())
+  userId        String     @unique
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  items         CartItem[]
+  appliedCoupon String?
+  
+  subtotal      Float      @default(0)
+  discount      Float      @default(0)
+  total         Float      @default(0)
+  
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@map("carts")
+}
+
+model CartItem {
+  id            String     @id @default(uuid())
+  cartId        String
+  cart          Cart       @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  
+  productId     String
+  product       Product    @relation(fields: [productId], references: [id])
+  
+  variantId     String?
+  variant       ProductVariant? @relation(fields: [variantId], references: [id])
+  
+  quantity      Int        @default(1)
+  
+  addedAt       DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@unique([cartId, variantId])
+  @@map("cart_items")
+}
+
+//  LISTA DE DESEOS
+model Wishlist {
+  id            String          @id @default(uuid())
+  userId        String          @unique
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  items         WishlistItem[]
+  
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@map("wishlists")
+}
+
+model WishlistItem {
+  id            String     @id @default(uuid())
+  wishlistId    String
+  wishlist      Wishlist   @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+  
+  productId     String
+  product       Product    @relation(fields: [productId], references: [id])
+  
+  addedAt       DateTime   @default(now())
+
+  @@unique([wishlistId, productId])
+  @@map("wishlist_items")
+}
+
+//  ÓRDENES
+model Order {
+  id              String      @id @default(uuid())
+  orderNumber     String      @unique
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
+  
+  status          OrderStatus @default(PENDING_PAYMENT)
+  
+  items           OrderItem[]
+  
+  subtotal        Float
+  discountAmount  Float       @default(0)
+  taxAmount       Float       @default(0)
+  shippingCost    Float       @default(0)
+  total           Float
+  
+  discountId      String?
+  discount        Discount?   @relation(fields: [discountId], references: [id])
+  
+  shippingAddress Json
+  billingAddress  Json?
+  
+  paymentMethod   String?     // "stripe", "paypal"
+  paymentId       String?     // ID de la transacción
+  paymentStatus   String?     // "pending", "completed", "failed", "refunded"
+  
+  trackingNumber  String?
+  carrier         String?
+  estimatedDelivery DateTime?
+  
+  notes           String?
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("orders")
+}
+
+model OrderItem {
+  id            String     @id @default(uuid())
+  orderId       String
+  order         Order      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  productId     String
+  product       Product    @relation(fields: [productId], references: [id])
+  
+  variantId     String?
+  variant       ProductVariant? @relation(fields: [variantId], references: [id])
+  
+  title         String
+  sku           String
+  size          String?
+  color         String?
+  price         Float
+  quantity      Int
+  imageUrl      String?
+  
+  createdAt     DateTime   @default(now())
+
+  @@map("order_items")
+}
+
+//  RESEÑAS
+model Review {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  productId     String
+  product       Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  rating        Int       // 1-5
+  title         String?
+  comment       String?
+  
+  images        String[]  @default([])
+  videos        String[]  @default([])
+  
+  size          String?   // Talla comprada
+  color         String?   // Color comprado
+  fit           String?   // "small", "perfect", "large"
+  
+  isVerified    Boolean   @default(false) // Compra verificada
+  helpfulCount  Int       @default(0)
+  notHelpfulCount Int     @default(0)
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([userId, productId])
+  @@map("reviews")
+}
+
+//  TICKETS DE SOPORTE
+model SupportTicket {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  
+  subject       String
+  message       String
+  status        String    @default("open") // "open", "in_progress", "resolved", "closed"
+  priority      String    @default("normal") // "low", "normal", "high", "urgent"
+  
+  orderId       String?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("support_tickets")
+}

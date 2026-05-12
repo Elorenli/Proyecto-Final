@@ -3,46 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Tienda - Inicio</title>
+    <title>Atelier</title>
+
+    
     <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/variable.css">
 </head>
+
 <body>
-    <header>
-        <div class="logo">
-            <h1>Mi Tienda</h1>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="productos.html">Productos</a></li>
-                <li><a href="carrito.html">Carrito (<span id="cart-count">0</span>)</a></li>
-                <li><a href="login.html">Login</a></li>
-            </ul>
+
+
+    <header class="header">
+
+        <div class="logo">Atelier</div>
+
+        <nav class="nav">
+
+            <div class="dropdown">
+                <a href="productos.html">PRODUCTOS</a>
+
+                <div class="dropdown-content">
+                    <a href="#">Vestidos</a>
+                    <a href="#">Blusas</a>
+                    <a href="#">Zapatos</a>
+                    <a href="#">Bolsos</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+
+                <a href="#categorias">CATEGORÍAS</a>
+
+                <div class="dropdown-content">
+                    <a href="Elementos/mujer.html">Ropa Mujer</a>
+                    <a href="#">Ropa Hombre</a>
+                    <a href="#">Ropa Niños</a>
+                    <a href="#">Accesorios</a>
+                </div>
+
+            </div>
+
         </nav>
+
+        <div class="icons">
+    <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+
+
+    <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+    </svg>
+    
+    <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+    </svg>
+    
+    <button id="darkModeToggle" class="dark-mode-btn">
+        <svg class="icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg class="icon sun-icon" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+    </button>
+        </div>
+
     </header>
 
-    <main>
-        <section class="hero">
-            <h2>Bienvenidos a Mi Tienda</h2>
-            <p>Los mejores productos al mejor precio</p>
-            <a href="productos.html" class="btn">Ver Productos</a>
-        </section>
+    <section class="hero">
 
-        <section class="productos-destacados">
-            <h2>Productos Destacados</h2>
-            <div class="productos-grid" id="productos-grid">
-                <!-- Los productos se cargarán con JavaScript -->
-                <p>Cargando productos...</p>
+        <div class="hero-text">
+
+            <h1>
+                Estilo <br> Atemporal
+            </h1>
+
+            <p>
+                Descubre piezas únicas para expresar tu esencia
+            </p>
+
+            <a href="#categorias">
+                <button>
+                    EXPLORAR COLECCIÓN →
+                </button>
+            </a>
+
+        </div>
+
+    </section>
+
+    <section class="ofertas">
+
+        <div class="title-row">
+            <h2>Ofertas Flash</h2>
+            <a href="#">VER TODAS →</a>
+        </div>
+
+        <div class="productos" id="productos"></div>
+
+    </section>
+
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <div class="footer-section">
+                <h3>Atelier</h3>
+                <p>Moda elegante y atemporal para cada ocasión.</p>
             </div>
-        </section>
-    </main>
 
-    <footer>
-        <p>&copy; 2024 Mi Tienda. Todos los derechos reservados.</p>
+            <div class="footer-section">
+                <h4>Enlaces</h4>
+                <a href="#">Inicio</a>
+                <a href="#">Productos</a>
+                <a href="#">Ofertas</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Ayuda</h4>
+                <a href="#">Contacto</a>
+                <a href="#">Preguntas</a>
+                <a href="#">Envíos</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Síguenos</h4>
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+                <a href="#">TikTok</a>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Atelier | Todos los derechos reservados</p>
+        </div>
+
     </footer>
 
     <script src="js/main.js"></script>
-    <script src="js/api.js"></script>
+
 </body>
 </html>
